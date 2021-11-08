@@ -2,14 +2,18 @@
   <div id="main_page">
     <h2>User form</h2>
     <ValidationObserver v-slot="{ handleSubmit }">
-      <form @submit.prevent="handleSubmit(submitUser)"> <!-- form -->
+      <b-form @submit.prevent="handleSubmit(submitUser)"> <!-- form -->
 
         <ValidationProvider name="Name" rules="required|alpha" v-slot="{ errors }">
-          <div class="form-group">
-            <label for="">Name</label>
-            <input v-model="name" type="text" placeholder="name"><br>
+          <b-form-group
+          id="input-group-1"
+          label-for="input-1"
+          description=`{{errors[0]}}`
+          >
+            <label>Name</label>
+            <b-form-input id="input-1" v-model="name" type="text" placeholder="name"></b-form-input><br>
             <span>{{ errors[0] }}</span>
-          </div>
+          </b-form-group>
       </ValidationProvider>
 
       <ValidationProvider name="Surname" rules="required|alpha" v-slot="{ errors }">
@@ -62,7 +66,7 @@
           <button><a href="users_table">Go to users table</a></button><br><br>
         </div>
 
-      </form>
+      </b-form>
     </ValidationObserver>
 
     <ol>
@@ -151,7 +155,8 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
+
 form {
   width: 700px;
   margin-left: auto;
@@ -173,5 +178,8 @@ a, a:hover {
   text-decoration: none;
   cursor: default;
   color: black;
+}
+h2 {
+  color:red
 }
 </style>
