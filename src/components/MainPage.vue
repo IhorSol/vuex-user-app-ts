@@ -1,120 +1,79 @@
 <template lang="html">
   <div id="main_page">
-    <h2>User form</h2>
+    <h2 class="text-primary">User form</h2>
     <ValidationObserver v-slot="{ handleSubmit }">
+      <b-alert variant="success" :show="alertSuccess">User added</b-alert>
       <b-form @submit.prevent="handleSubmit(submitUser)"> <!-- form -->
 
-        <ValidationProvider name="Name" rules="required|alpha" v-slot="{ errors }">
-          <b-form-group
-          id="input-group-1"
-          label-for="input-1"
-          description=`{{errors[0]}}`
-          >
+      <ValidationProvider name="Name" rules="required|alpha" v-slot="{ errors }">
+          <div class="form-group">
             <label>Name</label>
-            <b-form-input id="input-1" v-model="name" type="text" placeholder="name"></b-form-input><br>
-            <span>{{ errors[0] }}</span>
-          </b-form-group>
+            <b-form-input id="input-1" sm="4" v-model="name" type="text" placeholder="name"></b-form-input>
+            <span class="error">{{ errors[0] }}</span>
+          </div>
       </ValidationProvider>
 
       <ValidationProvider name="Surname" rules="required|alpha" v-slot="{ errors }">
         <div class="form-group">
-          <label for="">Surname</label>
-          <input v-model="surname" type="text" placeholder="surname"><br>
-          <span>{{ errors[0] }}</span>
+          <label>Surname</label>
+          <b-form-input v-model="surname" type="text" placeholder="surname"></b-form-input>
+          <span class="error">{{ errors[0] }}</span>
         </div>
       </ValidationProvider>
 
       <ValidationProvider name="Age" rules="required|integer|max:3" v-slot="{ errors }">
         <div class="form-group">
           <label for="">Age</label>
-          <input v-model="age" type="text" placeholder="age"><br>
-          <span>{{ errors[0] }}</span>
+          <b-form-input v-model="age" type="text" placeholder="age"></b-form-input>
+          <span class="error">{{ errors[0] }}</span>
         </div>
       </ValidationProvider>
 
-      <ValidationProvider name="Phone number" :rules="{required: true, regex: /^[0-9\+]{10,13}$/ }" v-slot="{ errors }">
+      <ValidationProvider name="Phone number" :rules="{required: true, regex: /^[0-9]{10,13}$/ }" v-slot="{ errors }">
         <div class="form-group">
           <label for="">Phone number</label>
-          <input v-model="phone" type="text" placeholder="phone number"><br>
-          <span>{{ errors[0] }}</span>
+          <b-form-input v-model="phone" type="text" placeholder="phone number"></b-form-input>
+          <span class="error">{{ errors[0] }}</span>
         </div>
       </ValidationProvider>
 
       <ValidationProvider name="Email" rules="required|email" v-slot="{ errors }">
         <div class="form-group">
           <label for="">Email</label>
-          <input v-model="email" type="text" placeholder="email"><br>
-          <span>{{ errors[0] }}</span>
+          <b-form-input v-model="email" type="text" placeholder="email"></b-form-input>
+          <span class="error">{{ errors[0] }}</span>
         </div>
       </ValidationProvider>
 
       <ValidationProvider name="Status" rules="required" v-slot="{ errors }">
         <div class="form-group">
-          <label for="">Status</label>
-          <select v-model="status">
+          <label>Status</label><br>
+          <select class="form-control" v-model="status">
             <option value="online">online</option>
             <option value="offline">offline</option>
             <option value="pending">pending</option>
-          </select><br>
-          <span>{{ errors[0] }}</span>
-        </div><br>
+          </select>
+          <span class="error">{{ errors[0] }}</span>
+        </div>
       </ValidationProvider>
 
-        <div class="group-button">
-          <button>Add user</button><br>
-          <button @click="resetForm">Reset the form</button><br>
-          <button><a href="users_table">Go to users table</a></button><br><br>
+        <div class="d-flex flex-column">
+          <b-button-group>
+            <b-button variant="primary" type="submit" class="btn-primary">Add user</b-button>
+            <b-button variant="primary" @click="resetForm">Reset the form</b-button><br>
+          </b-button-group>
+          <b-button variant="primary" onclick='location.href="users_table"'>Go to users table</b-button>
         </div>
 
       </b-form>
     </ValidationObserver>
-
-    <ol>
-      <li v-for="(user, index) in getAllUsers" :key="index">
-        {{ user.name }}
-        {{ user.surname }}
-        {{ user.age }}
-        {{ user.phone }}
-        {{ user.email }}
-        {{ user.status }}
-      </li>
-    </ol>
-
   </div>
+
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import { mapActions, mapGetters } from "vuex";
-
-//-------------------Move to separate file------------------------------------//
-import { ValidationProvider, ValidationObserver } from 'vee-validate';
-import { extend } from 'vee-validate';
-import { required, email, alpha, integer, max, regex } from 'vee-validate/dist/rules';
-
-Vue.component('ValidationProvider', ValidationProvider);
-Vue.component('ValidationObserver', ValidationObserver);
-
-extend('required', {
-  ...required,
-  message: 'This field is required'
-});
-extend('integer', {
-  ...integer,
-  message: 'Enter a correct age'
-});
-extend('max', {
-  ...max,
-  message: 'You are to ald. Enter a correct age'
-});
-extend('regex', {
-  ...regex,
-  message: 'Enter a correct phone number'
-});
-extend('alpha', alpha);
-extend('email', email);
-
-// ------------------------------------------------------//
 
 export default Vue.extend({
   name: 'MainPage',
@@ -125,7 +84,8 @@ export default Vue.extend({
       age: '',
       phone: '',
       email: '',
-      status: ''
+      status: '',
+      alertSuccess: false,
     }
   },
   methods: {
@@ -135,12 +95,12 @@ export default Vue.extend({
         name: this.name,
         surname: this.surname,
         age: parseInt(this.age),
-        phone: this.phone,
+        phone: parseInt(this.phone),
         email: this.email,
         status: this.status
       }
       this.addUser(user);
-      this.resetForm();
+      this.alertSuccess = true;
     },
     resetForm: function(): void {
       this.name = '';
@@ -149,6 +109,7 @@ export default Vue.extend({
       this.phone = '';
       this.email = '';
       this.status = '';
+      this.alertSuccess = false;
     }
   },
   computed: mapGetters(['getAllUsers'])
@@ -157,29 +118,34 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 
-form {
-  width: 700px;
-  margin-left: auto;
-  margin-right: auto;
-  border: 1px solid silver;
-}
-input {
-  width: 50%;
-  margin-top: 5px;
-}
-select {
-  margin-top: 5px;
-}
 #main_page {
-  text-align: center;
-  border: 1px solid silver;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
 }
-a, a:hover {
-  text-decoration: none;
-  cursor: default;
-  color: black;
+.form-group {
+  .error {
+    font-size: 12px;
+    color: #ff5447;
+    font-weight: 600;
+  }
+  input, select, label {
+    margin-top: 5px;
+  }
 }
-h2 {
-  color:red
+form {
+  width: 500px;
+  margin: 0 auto;
+  button {
+    margin-top: 25px;
+    align-items: center;
+    a {
+      text-decoration: none;
+      color: white;
+      width: 100%;
+      border: 1px solid silver;
+    }
+  }
 }
 </style>

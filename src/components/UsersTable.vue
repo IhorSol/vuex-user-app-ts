@@ -1,41 +1,46 @@
 <template lang="html">
   <div id="users_info">
-    <h2>Users table</h2>
+    <h2 class="text-center p-2 text-primary">Users table</h2>
 
-    <label>Filter by status</label>
-    <select v-model="userStatus">
-      <option value="all">all</option>
-      <option value="online">online</option>
-      <option value="offline">offline</option>
-      <option value="pending">pending</option>
-    </select>
-    <button @click="resetStatusFilter">Reset Filter</button>
+    <div class="input-fields p-3">
 
-  <br>
-  <label>Search: </label>
-  <input type="text" v-model="searchString" placeholder="search"><br>
+      <b-form-input type="text" v-model="searchString" placeholder="search in table"></b-form-input>
+      <label class="ms-1">Filter by status</label>
+      <select class="form-control" v-model="userStatus" >
+        <option value="all">all</option>
+        <option value="online">online</option>
+        <option value="offline">offline</option>
+        <option value="pending">pending</option>
+      </select>
+      <b-button class="reset-filter-btn" variant="primary" @click="resetStatusFilter">Reset Filter</b-button>
 
+    </div>
 
-  <table>
-    <tr>
-      <th>User name <i class="fas fa-arrow-down" @click="sortNameDescOrder"></i> <i class="fas fa-arrow-up" @click="sortNameAscOrder"></i></th>
-      <th>User Surname <i class="fas fa-arrow-down" @click="sortSurnameDescOrder"></i> <i class="fas fa-arrow-up" @click="sortSurnameAscOrder"></i></th>
-      <th>Age <i class="fas fa-arrow-down" @click="sortAgeDescOrder"></i> <i class="fas fa-arrow-up" @click="sortAgeAscOrder"></i></th>
-      <th>Phone <i class="fas fa-arrow-down" @click="sortPhoneDescOrder"></i> <i class="fas fa-arrow-up" @click="sortPhoneAscOrder"></i></th>
-      <th>Email <i class="fas fa-arrow-down" @click="sortEmailDescOrder"></i> <i class="fas fa-arrow-up" @click="sortEmailAscOrder"></i></th>
-      <th>Status <i class="fas fa-arrow-down" @click="sortStatusDescOrder"></i> <i class="fas fa-arrow-up" @click="sortStatusAscOrder"></i></th>
-    </tr>
-    <tr v-for="(user, index) in filterByStatus()(`${userStatus}`, `${searchString}`)" :key="index">
-      <td>{{ user.name }}</td>
-      <td>{{ user.surname }}</td>
-      <td>{{ user.age }}</td>
-      <td>{{ user.phone }}</td>
-      <td>{{ user.email }}</td>
-      <td>{{ user.status }}</td>
-    </tr>
-  </table> <br>
+        <table class="table table-striped table-light">
+          <thead>
+            <tr>
+              <th>User name <i class="fas fa-arrow-down" @click="sortNameDescOrder"></i> <i class="fas fa-arrow-up" @click="sortNameAscOrder"></i></th>
+              <th>User Surname <i class="fas fa-arrow-down" @click="sortSurnameDescOrder"></i> <i class="fas fa-arrow-up" @click="sortSurnameAscOrder"></i></th>
+              <th>Age <i class="fas fa-arrow-down" @click="sortAgeDescOrder"></i> <i class="fas fa-arrow-up" @click="sortAgeAscOrder"></i></th>
+              <th>Phone <i class="fas fa-arrow-down" @click="sortPhoneDescOrder"></i> <i class="fas fa-arrow-up" @click="sortPhoneAscOrder"></i></th>
+              <th>Email <i class="fas fa-arrow-down" @click="sortEmailDescOrder"></i> <i class="fas fa-arrow-up" @click="sortEmailAscOrder"></i></th>
+              <th>Status <i class="fas fa-arrow-down" @click="sortStatusDescOrder"></i> <i class="fas fa-arrow-up" @click="sortStatusAscOrder"></i></th>
+            </tr>
+          </thead>
+          <tbody>
+          <tr v-for="(user, index) in filterByStatus()(`${userStatus}`, `${searchString}`)" :key="index">
+            <td>{{ user.name }}</td>
+            <td>{{ user.surname }}</td>
+            <td>{{ user.age }}</td>
+            <td>{{ user.phone }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.status }}</td>
+          </tr>
+          </tbody>
+        </table>
 
-    <button><a href="main_page">Go to form page</a></button><br><br>
+      <b-button class="return-btn" variant="primary" onclick='location.href="main_page"'>Go to form page</b-button>
+
   </div>
 </template>
 
@@ -48,14 +53,7 @@ export default Vue.extend({
   data: function(){
     return {
       userStatus: 'all',
-      searchString: '',
-      testUser: {
-        name: 'Ihor',
-        surname: 'Solohub',
-        age: 30,
-        phone: 123456789,
-        email: 'ihor@email.com',
-        status: 'online'}
+      searchString: ''
     }
   },
   methods: {
@@ -63,30 +61,52 @@ export default Vue.extend({
     resetStatusFilter: function() {
       this.userStatus = 'all'
     }
-  },
-  computed: {
-    // ...mapGetters(['getAllUsers']) // 'filterByStatus'
   }
 })
 </script>
 
-<style lang="css" scoped>
-table, td, th {
-  border: 1px solid silver
-}
-table {
-  margin-left: auto;
-  margin-right: auto;
-}
+<style lang="scss" scoped>
+
 #users_info {
+  width: 950px;
+  margin: 0 auto;
   text-align: center;
 }
-a, a:hover {
-  text-decoration: none;
-  cursor: default;
-  color: black;
+.input-fields {
+  background-color: #e3edfc;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  input {
+    width: 40%;
+    height: 33px;
+  }
+  select {
+    height: 33px;
+    width: 15%;
+  }
+  .reset-filter-btn {
+    height: 33px;
+    padding-top: 3px;
+  }
 }
-i:hover {
-  cursor: pointer;
+.return-btn {
+  width: 30%;
+  margin-top: 30px;
+  a, a:hover {
+    text-decoration: none;
+    cursor: pointer;
+    color: white;
+  }
 }
+table {
+  margin: 0 auto;
+  i {
+    color: #2357b8;
+    &:hover {
+      cursor: pointer;
+    }
+ }
+}
+
 </style>

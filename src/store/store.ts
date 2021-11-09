@@ -15,16 +15,7 @@ const vuexLocal = new VuexPersistence({
 
 const store: StoreOptions<RootState> = {
   state: {
-    users: [
-      {
-        name: 'Ihor',
-        surname: 'Solohub',
-        age: 30,
-        phone: 123456789,
-        email: 'ihor@email.com',
-        status: 'online'
-      }
-    ]
+    users: []
   },
   getters: {
     getAllUsers: function (state) {
