@@ -2,7 +2,11 @@
   <div id="main_page">
     <h2 class="text-primary">User form</h2>
     <ValidationObserver v-slot="{ handleSubmit }">
-      <b-alert variant="success" :show="alertSuccess">User added</b-alert>
+
+      <b-alert :show="dismissCountDown" fade variant="success" @dismiss-count-down="countDownChanged">
+        User added
+      </b-alert>
+
       <b-form @submit.prevent="handleSubmit(submitUser)"> <!-- form -->
 
       <ValidationProvider name="Name" rules="required|alpha" v-slot="{ errors }">
@@ -85,7 +89,8 @@ export default Vue.extend({
       phone: '',
       email: '',
       status: '',
-      alertSuccess: false,
+      dismissSecs: 2,
+      dismissCountDown: 0,
     }
   },
   methods: {
@@ -95,13 +100,16 @@ export default Vue.extend({
         name: this.name,
         surname: this.surname,
         age: parseInt(this.age),
-        phone: parseInt(this.phone),
+        phone: this.phone,
         email: this.email,
         status: this.status
       }
       this.addUser(user);
-      this.alertSuccess = true;
+      this.dismissCountDown = this.dismissSecs
     },
+    countDownChanged(dismissCountDown) {
+        this.dismissCountDown = dismissCountDown
+      },
     resetForm: function(): void {
       this.name = '';
       this.surname = '';
@@ -109,7 +117,6 @@ export default Vue.extend({
       this.phone = '';
       this.email = '';
       this.status = '';
-      this.alertSuccess = false;
     }
   },
   computed: mapGetters(['getAllUsers'])

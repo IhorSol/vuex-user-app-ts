@@ -5,7 +5,8 @@ import { Module } from 'vuex';
 const mutations: MutationTree<any> = {
   // add new user to root state in users[]
     insertUser: function (state, data) {
-      data.root.users.push(data.user)
+      let userToAdd: User = data.user;
+      data.root.users.push(userToAdd);
     }
 }
 

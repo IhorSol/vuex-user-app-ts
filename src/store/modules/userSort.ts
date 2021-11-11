@@ -78,11 +78,11 @@ const getters: GetterTree<any, RootState> = {
   // --------------SORTING PHONE --------- //
   //sorting by phone ascending
   sortPhoneAscOrder: function(state, getters, rootState: RootState) {
-    return rootState.users.sort(function(a, b){return a.phone - b.phone})
+    return rootState.users.sort(function(a, b){return parseInt(a.phone) - parseInt(b.phone)})
   },
   //sorting by phone descending
   sortPhoneDescOrder: function(state, getters, rootState: RootState) {
-    return rootState.users.sort(function(a, b){return b.phone - a.phone})
+    return rootState.users.sort(function(a, b){return parseInt(b.phone) - parseInt(a.phone)})
   },
   // --------------SORTING EMAIL --------- //
   //sorting by email ascending

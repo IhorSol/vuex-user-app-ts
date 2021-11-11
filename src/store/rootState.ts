@@ -6,7 +6,7 @@ export interface User {
   name: string
   surname: string
   age: number
-  phone: number
+  phone: string
   email: string
   status: string
 }
